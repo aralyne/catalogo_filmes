@@ -53,6 +53,42 @@ RSpec.describe 'MoviesController', type: :request do
     end
   end
 
+  describe 'POST #create' do
+    context 'when passing valid data' do
+      it 'need to return status code 201' do
+        category = Category.create(name: 'Infantil')
+        movie_params = {title: 'Melhor que ontem', description: 'Filme dirigido por Maria', category_id: category.id}
+        
+        post '/movies', params: {movie: movie_params}
+
+        expect(response).to have_http_status(:created)
+      end
+
+      it 'need to return the registered movie' do
+        category = Category.create(name: 'Infantil')
+        movie_params = {title: 'Melhor que ontem', description: 'Filme dirigido por Maria', category_id: category.id}
+
+        post '/movies', params: {movie: movie_params}
+
+        expect(json_body).to have_key(:id)
+        expect(json_body).to have_key(:title)
+        expect(json_body).to have_key(:description)
+      end
+    end 
+
+    context 'when passing invalid data' do
+      it 'must return 422 http status code' do
+        movie_params = {title: nil, description: nil, category_id: nil}
+
+        post '/movies', params: {movie: movie_params}
+
+        expect(json_body).to have_key(:errors)
+        expect(json_body[:errors][:title][0]).to eq("can't be blank")
+        expect(json_body[:errors][:description][0]).to eq("can't be blank")
+      end
+    end
+  end
+
   describe 'PUT #update' do
     context 'when passing valid data' do
       it 'must return 204 http status code' do

@@ -19,6 +19,17 @@ class MoviesController < ApplicationController
     end
   end
 
+  #Criar Filme 
+  def create
+    movie = Movie.new(movie_params)
+   
+    if movie.save
+        render json: movie, status: :created
+    else
+        render json: {errors: movie.errors}, status: :unprocessable_entity
+    end
+  end
+  
   #alterar Filme
   def update
     movie = Movie.find(params[:id])
@@ -36,7 +47,7 @@ class MoviesController < ApplicationController
   end
 
   def movie_params
-    params.require(:movie).permit(:title, :description)
+    params.require(:movie).permit(:title, :description, :category_id)
   end
 
 end
