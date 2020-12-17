@@ -49,15 +49,15 @@ RSpec.describe 'UsersController', type: :request do
   end
 
   describe 'POST #create' do
-    context 'quando passar dados válidos' do
-      it 'precisa retornar o status code 201' do
+    context 'when passing valid data' do
+      it 'need to return status code 201' do
         user_params = {name: 'aralyne', email: 'aralynegs@gmail.com'}
         post '/users', params: {user: user_params}
 
         expect(response).to have_http_status(:created)
       end
 
-      it 'precisa retornar o usuario cadastrado' do
+      it 'need to return the registered user' do
         user_params = {name: 'aralyne', email: 'aralynegs@gmail.com'}
 
         post '/users', params: {user: user_params}
@@ -68,21 +68,22 @@ RSpec.describe 'UsersController', type: :request do
       end
     end 
 
-    context 'quando passar dados inválidos' do
-      it 'precisa retornar status cod 422' do
+    context 'when passing invalid data' do
+      it 'must return 422 http status code' do
         user_params = {name: nil, email: nil}
 
         post '/users', params: {user: user_params}
 
-        expect(json_body).to have_key(:message)
-        expect(json_body[:message]).to eq('User not saved')
+        expect(json_body).to have_key(:errors)
+        expect(json_body[:errors][:name][0]).to eq("can't be blank")
+        expect(json_body[:errors][:email][0]).to eq("can't be blank")
       end
     end
   end
 
   describe 'PUT #update' do
-    context 'quando passar dados válidos' do
-      it 'precisa retornar o status code 204 ' do
+    context 'when passing valid data' do
+      it 'must return 204 http status code' do
         user = User.create(name: 'Diego', email:'diego@gmail.com')
         user_params = {name: 'aralyne', email: 'aralynegs@gmail.com'}
 
@@ -92,19 +93,30 @@ RSpec.describe 'UsersController', type: :request do
       end
     end 
 
-    context 'quando passar dados inválidos' do
-      it 'precisa retornar status cod 422' do
+    context 'when passing invalid data' do
+      it 'must return 422 http status code' do
         user = User.create(name: 'Diego', email:'diego@gmail.com')
         user_params = {name: nil, email: nil}
 
         put "/users/#{user.id}", params: {user: user_params}
 
-        expect(json_body).to have_key(:message)
-        expect(json_body[:message]).to eq('User not updated')
+        expect(json_body).to have_key(:errors)
+        expect(json_body[:errors]).to have_key(:name)
+        expect(json_body[:errors]).to have_key(:email)
+        expect(json_body[:errors][:name][0]).to eq("can't be blank")
+        expect(json_body[:errors][:email][0]).to eq("can't be blank")
       end
-
     end
-
   end
+
+  describe 'DELETE #destroy' do
+    it 'must return 204 http status code' do
+      user = User.create(name:"aralyne", email:"aralyne@gmail.com")
+
+      delete "/users/#{user.id}"
+
+      expect(response).to have_http_status(:no_content)
+    end
+  end 
 
 end

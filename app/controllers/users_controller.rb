@@ -24,12 +24,8 @@ class UsersController < ApplicationController
     if user.save
         render json: user, status: :created
     else
-        render json: {message:'User not saved'}, status: :unprocessable_entity
+        render json: {errors: user.errors}, status: :unprocessable_entity
     end
-end
-
-  def user_params
-    params.require(:user).permit(:name, :email)
   end
 
   #alterar usuário
@@ -38,9 +34,17 @@ end
     if user.update(user_params)
         head :no_content
     else
-        render json: {message:'User not updated'}, status: :unprocessable_entity
-
+        render json: {errors: user.errors}, status: :unprocessable_entity
     end
+  end
+
+  def destroy
+    User.find(params[:id]).destroy
+    head :no_content
+  end
+
+  def user_params
+    params.require(:user).permit(:name, :email)
   end
 
 end
