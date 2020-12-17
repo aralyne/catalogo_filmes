@@ -32,4 +32,15 @@ end
     params.require(:user).permit(:name, :email)
   end
 
+  #alterar usuário
+  def update
+    user = User.find(params[:id])
+    if user.update(user_params)
+        head :no_content
+    else
+        render json: {message:'User not updated'}, status: :unprocessable_entity
+
+    end
+  end
+
 end

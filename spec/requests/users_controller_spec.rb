@@ -79,4 +79,32 @@ RSpec.describe 'UsersController', type: :request do
       end
     end
   end
+
+  describe 'PUT #update' do
+    context 'quando passar dados válidos' do
+      it 'precisa retornar o status code 204 ' do
+        user = User.create(name: 'Diego', email:'diego@gmail.com')
+        user_params = {name: 'aralyne', email: 'aralynegs@gmail.com'}
+
+        put "/users/#{user.id}", params: {user: user_params}
+
+        expect(response).to have_http_status(:no_content)
+      end
+    end 
+
+    context 'quando passar dados inválidos' do
+      it 'precisa retornar status cod 422' do
+        user = User.create(name: 'Diego', email:'diego@gmail.com')
+        user_params = {name: nil, email: nil}
+
+        put "/users/#{user.id}", params: {user: user_params}
+
+        expect(json_body).to have_key(:message)
+        expect(json_body[:message]).to eq('User not updated')
+      end
+
+    end
+
+  end
+
 end
