@@ -14,11 +14,15 @@ RSpec.describe 'MoviesController', type: :request do
         Movie.create(title: 'Velozes e Furiosos', description: 'foo', category_id: category.id)
   
         get '/movies'
-  
-        expect(json_body[0]).to have_key(:id)
-        expect(json_body[0]).to have_key(:title)
-        expect(json_body[0]).to have_key(:description)
-        expect(json_body[0]).to have_key(:category_id) 
+        
+        expect(json_body[0]).to have_key(:message)
+        expect(json_body[0]).to have_key(:movie)
+        expect(json_body[0][:movie]).to eq(:id)
+        expect(json_body[0][:movie]).to eq(:title)
+        expect(json_body[0][:movie]).to eq(:description)
+        expect(json_body[0]).to eq(:category) 
+        expect(json_body[0][:category]).to eq(:id)
+        expect(json_body[0][:category]).to eq(:name)
       end
     end
 

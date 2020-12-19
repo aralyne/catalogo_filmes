@@ -5,7 +5,7 @@ class MoviesController < ApplicationController
     if movies.empty?
       render json: {message: "Empty list"}, status: :ok
     else
-      render json: movies, status: :ok
+      render json: movies, status: :ok, each_serializer: MovieSerializer 
     end
   end
 
