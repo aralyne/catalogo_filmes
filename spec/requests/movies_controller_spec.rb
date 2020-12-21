@@ -42,7 +42,8 @@ RSpec.describe 'MoviesController', type: :request do
   describe "GET #show" do
 
     it 'must return 200 http status code' do
-      get '/movies'
+      user = User.create(name:"Aralyne",email:"aralynegs@gmail.com",password:"123")
+      get '/movies', headers: get_headers(user)
       expect(response).to have_http_status(:ok) 
     end 
 
