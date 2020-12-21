@@ -17,12 +17,14 @@ RSpec.describe 'MoviesController', type: :request do
         
         expect(json_body[0]).to have_key(:message)
         expect(json_body[0]).to have_key(:movie)
-        expect(json_body[0][:movie]).to eq(:id)
-        expect(json_body[0][:movie]).to eq(:title)
-        expect(json_body[0][:movie]).to eq(:description)
-        expect(json_body[0]).to eq(:category) 
-        expect(json_body[0][:category]).to eq(:id)
-        expect(json_body[0][:category]).to eq(:name)
+        expect(json_body[0][:movie]).to have_key(:id)
+        expect(json_body[0][:movie]).to have_key(:title)
+        expect(json_body[0][:movie]).to have_key(:description)
+        expect(json_body[0]).to have_key(:category) 
+        expect(json_body[0][:category]).to have_key(:id)
+        expect(json_body[0][:category]).to have_key(:name)
+        expect(json_body[0][:movie][:title]).to eq('Velozes e Furiosos')
+        expect(json_body.size).to eq(1) #numero de objetos
       end
     end
 
@@ -51,8 +53,16 @@ RSpec.describe 'MoviesController', type: :request do
 
         get "/movies/#{movie.id}"
 
-        expect(json_body).to have_key(:title)
-        expect(json_body).to have_key(:description)
+        expect(json_body).to have_key(:message)
+        expect(json_body).to have_key(:movie)
+        expect(json_body[:movie]).to have_key(:id)
+        expect(json_body[:movie]).to have_key(:title)
+        expect(json_body[:movie]).to have_key(:description)
+        expect(json_body[:movie]).to have_key(:created_at)
+        expect(json_body).to have_key(:category) 
+        expect(json_body[:category]).to have_key(:id)
+        expect(json_body[:category]).to have_key(:name)
+        expect(json_body[:movie][:title]).to eq('Melhor que ontem')
       end
     end
   end

@@ -1,4 +1,4 @@
-class MovieSerializer < ActiveModel::Serializer
+class Movies::Index::MovieSerializer < ActiveModel::Serializer
   attributes :message,  :movie, :category
 
   def category
