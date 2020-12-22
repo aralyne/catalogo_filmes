@@ -12,7 +12,7 @@ RSpec.describe 'CategoriesController', type: :request do
 
     context "When to list registered categories" do
       it 'must return a list of categories' do
-        user = User.create(name:"Aralyne",email:"aralynegs@gmail.com",password:"123456789")
+        user = User.create(name:"Aralyne", email:"aralynegs@gmail.com", password:"123456789")
         Category.create(name: 'Romance')
          
         get '/categories', headers: get_headers(user)
@@ -23,12 +23,13 @@ RSpec.describe 'CategoriesController', type: :request do
 
     context "When not to list registered categories" do
       it 'Inform the category that there are no categories registered' do
-        user = User.create(name:"Aralyne",email:"aralynegs@gmail.com",password:"123456789")
+        user = User.create(name:"Aralyne", email:"aralynegs@gmail.com", password:"123456789")
           
         get '/categories', headers: get_headers(user)
-
+        
         expect(json_body).to have_key(:message)
         expect(json_body[:message]).to eq("Empty list")
+        
       end
     end
   end
@@ -37,7 +38,7 @@ RSpec.describe 'CategoriesController', type: :request do
 
   it 'must return 200 http status code' do
     user = User.create(name:"Aralyne",email:"aralynegs@gmail.com",password:"123456789")
-    
+
     get '/categories', headers: get_headers(user)
 
     expect(response).to have_http_status(:ok) 

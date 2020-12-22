@@ -12,11 +12,7 @@ class UsersController < ApplicationController
   #listar usuário passando ID
   def show
       user = User.find(params[:id])
-      if user.nil?
-          render json: {message: "user not found"}, status: :ok
-      else
-          render json: user, status: :ok
-      end
+      render json: user, status: :ok
   end
   #Criar usuário 
   def create
@@ -44,7 +40,7 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:name, :email)
+    params.require(:user).permit(:name, :email,:password)
   end
 
 end
