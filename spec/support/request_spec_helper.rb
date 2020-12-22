@@ -4,7 +4,7 @@ module RequestSpecHelper
   end
   
   def get_headers(user)
-    binding.pry
+    
     post '/auth/sign_in', params: { email: user.email, password: user.password }
 
     {
@@ -14,5 +14,6 @@ module RequestSpecHelper
       'expiry': response.headers['expiry'],
       'uid': response.headers['uid']
     }
+    
   end
 end
