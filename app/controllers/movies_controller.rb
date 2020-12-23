@@ -22,6 +22,7 @@ class MoviesController < ApplicationController
 
   #Criar Filme 
   def create
+    authorize :movie
     movie = Movie.new(movie_params)
     if movie.save
         render json: movie, status: :created, serializer: Movies::Create::MovieSerializer
@@ -33,6 +34,7 @@ class MoviesController < ApplicationController
   #alterar Filme
   def update
     movie = Movie.find(params[:id])
+    authorize movie
     if movie.update(movie_params)
         head :no_content
     else
@@ -47,7 +49,7 @@ class MoviesController < ApplicationController
   end
 
   def movie_params
-    params.require(:movie).permit(:title, :description, :category_id)
+    params.require(:movie).permit(:title, :description, :category_id, :user_id)
   end
 
 end

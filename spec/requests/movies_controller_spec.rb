@@ -15,7 +15,7 @@ RSpec.describe 'MoviesController', type: :request do
       it 'must return a list of movies' do
         user = User.create(name:"Aralyne",email:"aralynegs@gmail.com",password:"123456789")
         category = Category.create(name: 'Ação')
-        Movie.create(title: 'Velozes e Furiosos', description: 'foo', category_id: category.id)
+        Movie.create(title: 'Velozes e Furiosos', description: 'foo', category_id: category.id, user_id: user.id)
   
         get '/movies', headers: get_headers(user)
         
@@ -58,7 +58,7 @@ RSpec.describe 'MoviesController', type: :request do
       it 'must return an user' do
         user = User.create(name:"Aralyne",email:"aralynegs@gmail.com",password:"123456789")
         category = Category.create(name: 'Infantil')
-        movie = Movie.create(title: 'Melhor que ontem', description: 'Bom', category_id: category.id)
+        movie = Movie.create(title: 'Melhor que ontem', description: 'Bom', category_id: category.id, user_id: user.id)
 
         get "/movies/#{movie.id}", headers: get_headers(user)
 
@@ -79,9 +79,9 @@ RSpec.describe 'MoviesController', type: :request do
   describe 'POST #create' do
     context 'when passing valid data' do
       it 'need to return status code 201' do
-        user = User.create(name:"Aralyne", password:"123456789", email:"aralynegs@gmail.com")
+        user = User.create(name:"Aralyne", password:"123456789", email:"aralynegs@gmail.com", profile:"admin")
         category = Category.create(name: 'Infantil')
-        movie_params = {title: 'Melhor que ontem', description: 'Filme dirigido por Maria', category_id: category.id}
+        movie_params = {title: 'Melhor que ontem', description: 'Filme dirigido por Maria', category_id: category.id, user_id: user.id}
         
         post '/movies', params: {movie: movie_params}, headers: get_headers(user)
 
@@ -89,9 +89,9 @@ RSpec.describe 'MoviesController', type: :request do
       end
 
       it 'need to return the registered movie' do
-        user = User.create(name:"Aralyne",email:"aralynegs@gmail.com",password:"123456789")
+        user = User.create(name:"Aralyne",email:"aralynegs@gmail.com",password:"123456789", profile:"admin")
         category = Category.create(name: 'Infantil')
-        movie_params = {title: 'Melhor que ontem', description: 'Filme dirigido por Maria', category_id: category.id}
+        movie_params = {title: 'Melhor que ontem', description: 'Filme dirigido por Maria', category_id: category.id, user_id: user.id}
 
         post '/movies', params: {movie: movie_params}, headers: get_headers(user)
         
@@ -104,8 +104,8 @@ RSpec.describe 'MoviesController', type: :request do
 
     context 'when passing invalid data' do
       it 'must return 422 http status code' do
-        user = User.create(name:"Aralyne",email:"aralynegs@gmail.com",password:"123456789")
-        movie_params = {title: nil, description: nil, category_id: nil}
+        user = User.create(name:"Aralyne",email:"aralynegs@gmail.com",password:"123456789", profile:"admin")
+        movie_params = {title: nil, description: nil, category_id: nil, user_id: nil, user_id: user.id}
 
         post '/movies', params: {movie: movie_params}, headers: get_headers(user)
 
@@ -119,10 +119,10 @@ RSpec.describe 'MoviesController', type: :request do
   describe 'PUT #update' do
     context 'when passing valid data' do
       it 'must return 204 http status code' do
-        user = User.create(name:"Aralyne", password:"123456789", email:"aralynegs@gmail.com")
+        user = User.create(name:"Aralyne", password:"123456789", email:"aralynegs@gmail.com", profile:"admin")
         category = Category.create(name: 'Infantil')
-        movie = Movie.create(title: 'De volta para o futuro 2', description:'Melhores', category_id: category.id)
-        movie_params = {title: 'De volta para o futuro', description:'Melhores', category_id: category.id}
+        movie = Movie.create(title: 'De volta para o futuro 2', description:'Melhores', category_id: category.id, user_id: user.id)
+        movie_params = {title: 'De volta para o futuro', description:'Melhores', category_id: category.id, user_id: user.id}
 
         put "/movies/#{movie.id}", params: {movie: movie_params}, headers: get_headers(user)
 
@@ -132,10 +132,10 @@ RSpec.describe 'MoviesController', type: :request do
 
     context 'when passing invalid data' do
       it 'must return 422 http status code' do
-        user = User.create(name:"Aralyne",email:"aralynegs@gmail.com",password:"123456789")
+        user = User.create(name:"Aralyne",email:"aralynegs@gmail.com",password:"123456789", profile:"simple_user")
         category = Category.create(name: 'Infantil')
-        movie = Movie.create(title: 'De volta para o futuro 2', description:'Melhores', category_id: category.id)
-        movie_params = {title: nil, description: nil, category_id: nil}
+        movie = Movie.create(title: 'De volta para o futuro 2', description:'Melhores', category_id: category.id, user_id: user.id)
+        movie_params = {title: nil, description: nil, category_id: nil, user_id: nil}
 
         put "/movies/#{movie.id}", params: {movie: movie_params}, headers: get_headers(user)
 
@@ -150,9 +150,9 @@ RSpec.describe 'MoviesController', type: :request do
 
   describe 'DELETE #destroy' do
     it 'must return 204 http status code' do
-      user = User.create(name:"Aralyne",email:"aralynegs@gmail.com",password:"123456789")
+      user = User.create(name:"Aralyne",email:"aralynegs@gmail.com",password:"123456789", profile:"admin")
       category = Category.create(name: 'Infantil')
-      movie = Movie.create(title: 'Melhor que ontem', description: 'Bom', category_id: category.id)
+      movie = Movie.create(title: 'Melhor que ontem', description: 'Bom', category_id: category.id, user_id: user.id)
 
       delete "/movies/#{movie.id}", headers: get_headers(user)
 
