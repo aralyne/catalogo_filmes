@@ -23,9 +23,8 @@ class MoviesController < ApplicationController
   #Criar Filme 
   def create
     movie = Movie.new(movie_params)
-   
     if movie.save
-        render json: movie, status: :created
+        render json: movie, status: :created, serializer: Movies::Create::MovieSerializer
     else
         render json: {errors: movie.errors}, status: :unprocessable_entity
     end

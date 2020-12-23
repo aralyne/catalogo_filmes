@@ -94,10 +94,11 @@ RSpec.describe 'MoviesController', type: :request do
         movie_params = {title: 'Melhor que ontem', description: 'Filme dirigido por Maria', category_id: category.id}
 
         post '/movies', params: {movie: movie_params}, headers: get_headers(user)
-
-        expect(json_body).to have_key(:id)
-        expect(json_body).to have_key(:title)
-        expect(json_body).to have_key(:description)
+        
+        expect(json_body).to have_key(:movie)
+        expect(json_body[:movie]).to have_key(:id)
+        expect(json_body[:movie]).to have_key(:title)
+        expect(json_body[:movie]).to have_key(:description)
       end
     end 
 
@@ -148,15 +149,15 @@ RSpec.describe 'MoviesController', type: :request do
   end
 
   describe 'DELETE #destroy' do
-  it 'must return 204 http status code' do
-    user = User.create(name:"Aralyne",email:"aralynegs@gmail.com",password:"123456789")
-    category = Category.create(name: 'Infantil')
-    movie = Movie.create(title: 'Melhor que ontem', description: 'Bom', category_id: category.id)
+    it 'must return 204 http status code' do
+      user = User.create(name:"Aralyne",email:"aralynegs@gmail.com",password:"123456789")
+      category = Category.create(name: 'Infantil')
+      movie = Movie.create(title: 'Melhor que ontem', description: 'Bom', category_id: category.id)
 
-    delete "/movies/#{movie.id}", headers: get_headers(user)
+      delete "/movies/#{movie.id}", headers: get_headers(user)
 
-    expect(response).to have_http_status(:no_content)
-  end
-end 
+      expect(response).to have_http_status(:no_content)
+    end
+  end 
 
 end
