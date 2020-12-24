@@ -4,7 +4,7 @@ class CategoriesController < ApplicationController
       if categories.empty?
         render json: {message: "Empty list"}, status: :ok
       else
-        render json: categories, status: :ok
+        render json: categories, status: :ok, each_serializer: Categories::Index::CategorySerializer
       end
   end  
     #listar categoria passando ID
@@ -13,14 +13,14 @@ class CategoriesController < ApplicationController
     if category.nil?
         render json: {message: "category not found"}, status: :ok
     else
-        render json: category, status: :ok
+        render json: category, status: :ok, serializer: Categories::Show::CategorySerializer
     end
   end
   #Criar categoria 
   def create
     category = Category.new(category_params)
     if category.save
-        render json: category, status: :created
+        render json: category, status: :created, serializer: Categories::Create::CategorySerializer
     else
         render json: {errors: category.errors}, status: :unprocessable_entity
     end

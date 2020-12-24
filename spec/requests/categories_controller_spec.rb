@@ -16,8 +16,10 @@ RSpec.describe 'CategoriesController', type: :request do
         Category.create(name: 'Romance')
          
         get '/categories', headers: get_headers(user)
-  
-        expect(json_body[0]).to have_key(:name)
+        
+        expect(json_body[0]).to have_key(:message)
+        expect(json_body[0]).to have_key(:category) 
+        expect(json_body[0][:category]).to have_key(:name)
       end
     end
 
@@ -36,98 +38,101 @@ RSpec.describe 'CategoriesController', type: :request do
 
   describe "GET #show" do
 
-  it 'must return 200 http status code' do
-    user = User.create(name:"Aralyne",email:"aralynegs@gmail.com",password:"123456789")
-
-    get '/categories', headers: get_headers(user)
-
-    expect(response).to have_http_status(:ok) 
-  end 
-
-  context 'When to list a category' do
-    it 'must return a category' do
+    it 'must return 200 http status code' do
       user = User.create(name:"Aralyne",email:"aralynegs@gmail.com",password:"123456789")
-      category = Category.create(name: 'Romance')
 
-      get "/categories/#{category.id}", headers: get_headers(user)
+      get '/categories', headers: get_headers(user)
 
-      expect(json_body).to have_key(:name)
+      expect(response).to have_http_status(:ok) 
+    end 
+
+    context 'When to list a category' do
+      it 'must return a category' do
+        user = User.create(name:"Aralyne",email:"aralynegs@gmail.com",password:"123456789")
+        category = Category.create(name: 'Romance')
+
+        get "/categories/#{category.id}", headers: get_headers(user)
+
+        expect(json_body).to have_key(:category)
+        expect(json_body[:category]).to have_key(:id)
+        expect(json_body[:category]).to have_key(:name)
+      end
     end
   end
-end
 
-describe 'POST #create' do
-  context 'when passing valid data' do
-    it 'need to return status code 201' do
-      user = User.create(name:"Aralyne",email:"aralynegs@gmail.com",password:"123456789")
-      category_params = {name: 'Romance'}
+  describe 'POST #create' do
+    context 'when passing valid data' do
+      it 'need to return status code 201' do
+        user = User.create(name:"Aralyne",email:"aralynegs@gmail.com",password:"123456789")
+        category_params = {name: 'Romance'}
 
-      post '/categories', params: {category: category_params}, headers: get_headers(user)
+        post '/categories', params: {category: category_params}, headers: get_headers(user)
 
-      expect(response).to have_http_status(:created)
-    end
+        expect(response).to have_http_status(:created)
+      end
 
-    it 'need to return the registered category' do
-      user = User.create(name:"Aralyne",email:"aralynegs@gmail.com",password:"123456789")
-      category_params = {name: 'Romance'}
+      it 'need to return the registered category' do
+        user = User.create(name:"Aralyne",email:"aralynegs@gmail.com",password:"123456789")
+        category_params = {name: 'Romance'}
 
-      post '/categories', params: {category: category_params}, headers: get_headers(user)
+        post '/categories', params: {category: category_params}, headers: get_headers(user)
 
-      expect(json_body).to have_key(:id)
-      expect(json_body).to have_key(:name)
-    end
-  end 
+        expect(json_body).to have_key(:category)
+        expect(json_body[:category]).to have_key(:id)
+        expect(json_body[:category]).to have_key(:name)
+      end
+    end 
 
-  context 'when passing invalid data' do
-    it 'must return 422 http status code' do
-      user = User.create(name:"Aralyne",email:"aralynegs@gmail.com",password:"123456789")
-      category_params = {name: nil}
+    context 'when passing invalid data' do
+      it 'must return 422 http status code' do
+        user = User.create(name:"Aralyne",email:"aralynegs@gmail.com",password:"123456789")
+        category_params = {name: nil}
 
-      post '/categories', params: {category: category_params}, headers: get_headers(user)
+        post '/categories', params: {category: category_params}, headers: get_headers(user)
 
-      expect(json_body).to have_key(:errors)
-      expect(json_body[:errors][:name][0]).to eq("can't be blank")
+        expect(json_body).to have_key(:errors)
+        expect(json_body[:errors][:name][0]).to eq("can't be blank")
+      end
     end
   end
-end
 
-describe 'PUT #update' do
-  context 'when passing valid data' do
+  describe 'PUT #update' do
+    context 'when passing valid data' do
+      it 'must return 204 http status code' do
+        user = User.create(name:"Aralyne",email:"aralynegs@gmail.com",password:"123456789")
+        category = Category.create(name: 'Romance')
+        category_params = {name: 'Drama'}
+
+        put "/categories/#{category.id}", params: {category: category_params}, headers: get_headers(user)
+
+        expect(response).to have_http_status(:no_content)
+      end
+    end 
+
+    context 'when passing invalid data' do
+      it 'must return 422 http status code' do
+        user = User.create(name:"Aralyne",email:"aralynegs@gmail.com",password:"123456789")
+        category = Category.create(name: 'Romance')
+        category_params = {name: nil}
+
+        put "/categories/#{category.id}", params: {category: category_params}, headers: get_headers(user)
+
+        expect(json_body).to have_key(:errors)
+        expect(json_body[:errors]).to have_key(:name)
+        expect(json_body[:errors][:name][0]).to eq("can't be blank")
+      end
+    end
+  end
+
+  describe 'DELETE #destroy' do
     it 'must return 204 http status code' do
       user = User.create(name:"Aralyne",email:"aralynegs@gmail.com",password:"123456789")
-      category = Category.create(name: 'Romance')
-      category_params = {name: 'Drama'}
+      category = Category.create(name:"Romance")
 
-      put "/categories/#{category.id}", params: {category: category_params}, headers: get_headers(user)
+      delete "/categories/#{category.id}", headers: get_headers(user)
 
       expect(response).to have_http_status(:no_content)
     end
   end 
-
-  context 'when passing invalid data' do
-    it 'must return 422 http status code' do
-      user = User.create(name:"Aralyne",email:"aralynegs@gmail.com",password:"123456789")
-      category = Category.create(name: 'Romance')
-      category_params = {name: nil}
-
-      put "/categories/#{category.id}", params: {category: category_params}, headers: get_headers(user)
-
-      expect(json_body).to have_key(:errors)
-      expect(json_body[:errors]).to have_key(:name)
-      expect(json_body[:errors][:name][0]).to eq("can't be blank")
-    end
-  end
-end
-
-describe 'DELETE #destroy' do
-  it 'must return 204 http status code' do
-    user = User.create(name:"Aralyne",email:"aralynegs@gmail.com",password:"123456789")
-    category = Category.create(name:"Romance")
-
-    delete "/categories/#{category.id}", headers: get_headers(user)
-
-    expect(response).to have_http_status(:no_content)
-  end
-end 
 
 end
