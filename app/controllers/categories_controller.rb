@@ -18,6 +18,7 @@ class CategoriesController < ApplicationController
   end
   #Criar categoria 
   def create
+    authorize :category
     category = Category.new(category_params)
     if category.save
         render json: category, status: :created, serializer: Categories::Create::CategorySerializer
@@ -29,6 +30,7 @@ class CategoriesController < ApplicationController
   #alterar categoria
   def update
     category = Category.find(params[:id])
+    authorize category
     if category.update(category_params)
         head :no_content
     else

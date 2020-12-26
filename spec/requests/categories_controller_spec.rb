@@ -63,7 +63,7 @@ RSpec.describe 'CategoriesController', type: :request do
   describe 'POST #create' do
     context 'when passing valid data' do
       it 'need to return status code 201' do
-        user = User.create(name:"Aralyne",email:"aralynegs@gmail.com",password:"123456789")
+        user = User.create(name:"Aralyne",email:"aralynegs@gmail.com",password:"123456789", profile:"admin")
         category_params = {name: 'Romance'}
 
         post '/categories', params: {category: category_params}, headers: get_headers(user)
@@ -72,7 +72,7 @@ RSpec.describe 'CategoriesController', type: :request do
       end
 
       it 'need to return the registered category' do
-        user = User.create(name:"Aralyne",email:"aralynegs@gmail.com",password:"123456789")
+        user = User.create(name:"Aralyne",email:"aralynegs@gmail.com",password:"123456789", profile:"admin")
         category_params = {name: 'Romance'}
 
         post '/categories', params: {category: category_params}, headers: get_headers(user)
@@ -85,7 +85,7 @@ RSpec.describe 'CategoriesController', type: :request do
 
     context 'when passing invalid data' do
       it 'must return 422 http status code' do
-        user = User.create(name:"Aralyne",email:"aralynegs@gmail.com",password:"123456789")
+        user = User.create(name:"Aralyne",email:"aralynegs@gmail.com",password:"123456789", profile:"admin")
         category_params = {name: nil}
 
         post '/categories', params: {category: category_params}, headers: get_headers(user)
@@ -99,7 +99,7 @@ RSpec.describe 'CategoriesController', type: :request do
   describe 'PUT #update' do
     context 'when passing valid data' do
       it 'must return 204 http status code' do
-        user = User.create(name:"Aralyne",email:"aralynegs@gmail.com",password:"123456789")
+        user = User.create(name:"Aralyne",email:"aralynegs@gmail.com",password:"123456789", profile:"simple_user")
         category = Category.create(name: 'Romance')
         category_params = {name: 'Drama'}
 
@@ -111,7 +111,7 @@ RSpec.describe 'CategoriesController', type: :request do
 
     context 'when passing invalid data' do
       it 'must return 422 http status code' do
-        user = User.create(name:"Aralyne",email:"aralynegs@gmail.com",password:"123456789")
+        user = User.create(name:"Aralyne",email:"aralynegs@gmail.com",password:"123456789", profile:"simple_user")
         category = Category.create(name: 'Romance')
         category_params = {name: nil}
 
