@@ -17,8 +17,10 @@ RSpec.describe 'UsersController', type: :request do
 
         get '/users', headers: get_headers(userauth)
 
-        expect(json_body[0]).to have_key(:name)
-        expect(json_body[0]).to have_key(:email)
+        expect(json_body[0]).to have_key(:user)
+        expect(json_body[0][:user]).to have_key(:name)
+        expect(json_body[0][:user]).to have_key(:email)
+
       end
     end
   end
@@ -40,7 +42,9 @@ RSpec.describe 'UsersController', type: :request do
 
         get "/users/#{user.id}", headers: get_headers(userauth)
 
-        expect(json_body).to have_key(:name)
+        expect(json_body).to have_key(:user)
+        expect(json_body[:user]).to have_key(:id)
+        expect(json_body[:user]).to have_key(:name)
       end
     end
   end
@@ -62,9 +66,10 @@ RSpec.describe 'UsersController', type: :request do
 
         post '/users', params: {user: user_params}, headers: get_headers(userauth)
 
-        expect(json_body).to have_key(:id)
-        expect(json_body).to have_key(:name)
-        expect(json_body).to have_key(:email)
+        expect(json_body).to have_key(:user)
+        expect(json_body[:user]).to have_key(:id)
+        expect(json_body[:user]).to have_key(:name)
+        expect(json_body[:user]).to have_key(:email)
       end
     end 
 

@@ -5,20 +5,20 @@ class UsersController < ApplicationController
       if users.empty?
         render json: {message: "Empty list"}, status: :ok
       else
-        render json: users, status: :ok
+        render json: users, status: :ok, each_serializer: Users::Index::UserSerializer
       end
   end
 
   #listar usuário passando ID
   def show
       user = User.find(params[:id])
-      render json: user, status: :ok
+      render json: user, status: :ok, serializer: Users::Show::UserSerializer
   end
   #Criar usuário 
   def create
     user = User.new(user_params)
     if user.save
-        render json: user, status: :created
+        render json: user, status: :created, serializer: Users::Create::UserSerializer
     else
         render json: {errors: user.errors}, status: :unprocessable_entity
     end
