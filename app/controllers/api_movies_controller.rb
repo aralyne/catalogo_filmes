@@ -12,7 +12,7 @@ class ApiMoviesController < ApplicationController
     render json: movie, status: :created, serializer: Import::ImportSerializer
   end
 
-  def api_movies_params
-    params.require(:adapter).permit(:title)
+  def api_movies_params #filme que vem da API externa
+    params.require(:movie).permit(:title)
   end
 end
