@@ -25,6 +25,7 @@ gem 'active_model_serializers', '~> 0.10.0'
 gem 'devise_token_auth', github: 'lynndylanhurley/devise_token_auth'
 gem 'omniauth', '~> 1.3', '>= 1.3.1'
 gem "pundit"
+gem "httparty"
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 # gem 'rack-cors'
