@@ -4,18 +4,19 @@ RSpec.describe 'ApiMoviesController', type: :request do
   context 'when passing valid data' do
     describe 'POST #import' do
       it 'must return 201' do
-        user = User.create(name:"Aralyne",email:"aralynegs@gmail.com",password:"123456789")
+
+        user = create(:user)
         api_movies_params = {title: 'Batman'}
 
         post '/import_movies', params: {movie: api_movies_params}, headers: get_headers(user)
 
         expect(response).to have_http_status(:created) 
-
+        
       end
     end 
 
     it 'need to return the registered Movie' do
-      user = User.create(name:"Aralyne",email:"aralynegs@gmail.com",password:"123456789", profile:"admin")
+      user = create(:user)
       api_movies_params = {title: 'Batman'}
 
       post '/import_movies', params: {movie: api_movies_params}, headers: get_headers(user)

@@ -1,6 +1,7 @@
 class ApiMoviesController < ApplicationController
   def import
     adapter = Omdb::Movie.new(api_movies_params).call
+    
     categories = adapter[:categories].map{|c| Category.find_or_create_by(name: c)}
     movie = Movie.create(
       user_id: current_user.id, 
