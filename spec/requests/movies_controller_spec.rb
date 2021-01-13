@@ -104,7 +104,7 @@ RSpec.describe 'MoviesController', type: :request do
     context 'when passing invalid data' do
       it 'must return 422 http status code' do
         user = create(:user)
-        movie_params = {title: nil, description: nil, category_id: nil, user_id: nil, user_id: user.id}
+        movie_params = attributes_for(:category, title: nil, description: nil, category_id: nil, user_id: nil)
 
         post '/movies', params: {movie: movie_params}, headers: get_headers(user)
 
@@ -134,7 +134,7 @@ RSpec.describe 'MoviesController', type: :request do
         user = create(:user)
         category = create(:category)
         movie = create(:movie, category_id: category.id, user_id: user.id)
-        movie_params = {title: nil, description: nil, category_id: nil, user_id: nil}
+        movie_params = attributes_for(:category, title: nil, description: nil, category_id: nil, user_id: nil)
 
         put "/movies/#{movie.id}", params: {movie: movie_params}, headers: get_headers(user)
 

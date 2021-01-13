@@ -84,7 +84,7 @@ RSpec.describe 'CategoriesController', type: :request do
     context 'when passing invalid data' do
       it 'must return 422 http status code' do
         user = create(:user)
-        category_params = {name: nil}
+        category_params = attributes_for(:category, name: nil)
 
         post '/categories', params: {category: category_params}, headers: get_headers(user)
 
@@ -111,7 +111,7 @@ RSpec.describe 'CategoriesController', type: :request do
       it 'must return 422 http status code' do
         user = create(:user)
         category = create(:category)
-        category_params = {name: nil}
+        category_params = attributes_for(:category, name: nil)
 
         put "/categories/#{category.id}", params: {category: category_params}, headers: get_headers(user)
 
