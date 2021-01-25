@@ -10,7 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_23_160641) do
+ActiveRecord::Schema.define(version: 2021_01_15_153930) do
+
+  create_table "addresses", force: :cascade do |t|
+    t.string "street"
+    t.string "cep"
+    t.string "city"
+    t.string "neighborhood"
+    t.string "number"
+    t.integer "user_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_addresses_on_user_id"
+  end
 
   create_table "categories", force: :cascade do |t|
     t.string "name"
@@ -55,6 +67,7 @@ ActiveRecord::Schema.define(version: 2020_12_23_160641) do
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
 
+  add_foreign_key "addresses", "users"
   add_foreign_key "movies", "categories"
   add_foreign_key "movies", "users"
 end

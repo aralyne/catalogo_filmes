@@ -53,10 +53,13 @@ RSpec.describe 'UsersController', type: :request do
     context 'when passing valid data' do
       it 'need to return status code 201' do
         userauth = create(:user)
-        user_params = attributes_for(:user)
+        user_params = attributes_for(:user) 
+        address_params = attributes_for(:address)
+        params = user_params.merge!(addresses_attributes:[address_params])
+       
+        post '/users', params: {user: params}, headers: get_headers(userauth)
 
-        post '/users', params: {user: user_params}, headers: get_headers(userauth)
-
+        binding.pry
         expect(response).to have_http_status(:created)
       end
 
@@ -93,8 +96,10 @@ RSpec.describe 'UsersController', type: :request do
         userauth = create(:user)
         user = create(:user)
         user_params = attributes_for(:user)
+        address_params = attributes_for(:address)
+        params = user_params.merge!(addresses_attributes:[address_params])
 
-        put "/users/#{user.id}", params: {user: user_params}, headers: get_headers(userauth)
+        put "/users/#{user.id}", params: {user: params}, headers: get_headers(userauth)
 
         expect(response).to have_http_status(:no_content)
       end
